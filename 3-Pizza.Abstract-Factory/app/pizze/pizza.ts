@@ -1,9 +1,3 @@
-import {
-  ThinCrustDough,
-  MarinaraSauce,
-  ReggianoCheese,
-} from "@/ingredients/ingredients";
-
 export abstract class Pizza {
   protected name!: string;
 
@@ -20,14 +14,8 @@ export abstract class Pizza {
   box(): void {
     console.log("Place pizza in official PizzaStore box");
   }
-}
 
-export class CheesePizza extends Pizza {
-  prepare(): void {
-    console.log(`Preparing ${this.name}`);
-
-    const dough = new ThinCrustDough(); // ❌ dépendance concrète
-    const sauce = new MarinaraSauce();
-    const cheese = new ReggianoCheese();
+  getName(): string {
+    return this.name;
   }
 }
