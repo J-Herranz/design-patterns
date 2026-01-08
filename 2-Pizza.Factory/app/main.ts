@@ -1,14 +1,17 @@
-import { PizzaStore } from "./pizza.store";
+import { ChicagoPizzaStore, NapoliPizzaStore } from "app/stores/regional.pizza.stores";
 
 function main() {
-  const pizzaFactory = new PizzaStore();
-  const pizza = pizzaFactory.orderPizza("margherita", "NAPOLI");
-  console.log(pizza);
+  const napoliStore = new NapoliPizzaStore();
+  const chicagoStore = new ChicagoPizzaStore();
 
-  const pizza2 = pizzaFactory.orderPizza("pepperoni", "NAPOLI");
-  console.log(pizza2);
+  const pizza1 = napoliStore.orderPizza("margherita");
+  console.log(`Pedido: ${pizza1.getName()}`);
 
-  const pizza3 = pizzaFactory.orderPizza("veggie", "Chicago");
-  console.log(pizza3);
+  const pizza2 = napoliStore.orderPizza("pepperoni");
+  console.log(`Pedido: ${pizza2.getName()}`);
+
+  const pizza3 = chicagoStore.orderPizza("veggie");
+  console.log(`Pedido: ${pizza3.getName()}`);
 }
+
 main();
