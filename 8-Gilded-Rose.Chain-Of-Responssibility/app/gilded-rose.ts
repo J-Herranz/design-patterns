@@ -1,62 +1,26 @@
-export class Item {
-  constructor(
-    public name: string,
-    public sellIn: number,
-    public quality: number
-  ) {}
-}
+import { AgedBrieHandler } from "./Handlers/AgedBrieHandler";
+import { BackstagePassesHandler } from "./Handlers/BackstagePassesHandler";
+import { ConjuredHandler } from "./Handlers/Conjured";
+import { ItemHandler } from "./Handlers/ItemHandler";
+import { StandardItemHandler } from "./Handlers/StandardItemHandler";
+import { SulfurasHandler } from "./Handlers/SulfurasHandler";
+import { Item } from "./Item";
+
 export class GildedRose {
-  constructor(public items: Item[]) {}
+  private handler: ItemHandler;
+
+  constructor(public items: Item[]) {
+    this.handler = new AgedBrieHandler();
+    this.handler
+      .setNext(new BackstagePassesHandler())
+      .setNext(new SulfurasHandler())
+      .setNext(new ConjuredHandler())
+      .setNext(new StandardItemHandler());
+  }
 
   updateQuality(): void {
     for (const item of this.items) {
-      if (item.name !== "Aged Brie" && item.name !== "Backstage passes") {
-        if (item.quality > 0) {
-          if (item.name !== "Sulfuras") {
-            item.quality--;
-          }
-        }
-      } else {
-        if (item.quality < 50) {
-          item.quality++;
-
-          if (item.name === "Backstage passes") {
-            if (item.sellIn < 11) {
-              if (item.quality < 50) {
-                item.quality++;
-              }
-            }
-
-            if (item.sellIn < 6) {
-              if (item.quality < 50) {
-                item.quality++;
-              }
-            }
-          }
-        }
-      }
-
-      if (item.name !== "Sulfuras") {
-        item.sellIn--;
-      }
-
-      if (item.sellIn < 0) {
-        if (item.name !== "Aged Brie") {
-          if (item.name !== "Backstage passes") {
-            if (item.quality > 0) {
-              if (item.name !== "Sulfuras") {
-                item.quality--;
-              }
-            }
-          } else {
-            item.quality = 0;
-          }
-        } else {
-          if (item.quality < 50) {
-            item.quality++;
-          }
-        }
-      }
+      this.handler.handle(item);
     }
   }
 }
